@@ -13,16 +13,6 @@ const keyMap = [
     { name: "jump", keys: ["Space"] },
 ];
 
-// const GROUND_Y = 0.5; // ความสูงของกล่องตอนอยู่บนพื้น
-// const JUMP_HEIGHT = 2; // กระโดดสูงกี่หน่วย
-// const JUMP_DURATION = 0.6; // ลอยอยู่กี่วินาที
-// const GRAVITY = (8 * JUMP_HEIGHT) / JUMP_DURATION ** 2; // แรงดึงลง (หน่วยต่อวินาที²)
-// const JUMP_SPEED = (4 * JUMP_HEIGHT) / JUMP_DURATION; // ความเร็วพุ่งขึ้นตอนเริ่มกระโดด
-// const forwardDir = new Vector3();
-// const rightDir = new Vector3();
-// const followPos = new Vector3();
-// const move = new Vector3();
-
 function TestObjMoveGame() {
     return (
         // 4. ครอบ Canvas ไว้ เพื่อให้ทุกอย่างข้างในอ่านปุ่มได้
