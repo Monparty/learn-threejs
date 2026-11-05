@@ -31,8 +31,8 @@ function TestObjMoveGame() {
 
                 {/* components */}
                 <Wall />
-                <Stage />
                 <Player />
+                <Stage />
             </Canvas>
         </KeyboardControls>
     );

@@ -2,7 +2,7 @@ import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import { Vector3 } from "three";
-import { isBlocked, overlaps, STAGE, STAGE_TOP_Y } from "./share";
+import { isBlocked, overlaps, STAGES } from "./share";
 
 const GROUND_Y = 0.5; // ความสูงของกล่องตอนอยู่บนพื้น
 const JUMP_HEIGHT = 2; // กระโดดสูงกี่หน่วย
@@ -48,21 +48,32 @@ function Player() {
         if (!isBlocked(pos.x + move.x, pos.z, pos.y)) pos.x += move.x;
         if (!isBlocked(pos.x, pos.z + move.z, pos.y)) pos.z += move.z;
 
-        // พื้นใต้เท้าตอนนี้ ถ้าอยู่เหนือแท่นคือหลังแท่น ไม่งั้นคือพื้นปกติ
-        const floorY = overlaps(STAGE, pos.x, pos.z) ? STAGE_TOP_Y : GROUND_Y;
+        const handleJump = (floors) => {
+            if (jump && floors.some((floor) => pos.y <= floor)) {
+                velocityY.current = JUMP_SPEED;
+            }
+        };
 
-        // เริ่มกระโดดได้เฉพาะตอนยืนบนพื้นหรือแท่น กันกระโดดซ้ำกลางอากาศ
-        if (jump && pos.y <= floorY) velocityY.current = JUMP_SPEED;
+        const handleFloorCollision = (floors) => {
+            floors.forEach((floor) => {
+                if (pos.y <= floor) {
+                    pos.y = floor;
+                    velocityY.current = 0;
+                }
+            });
+        };
+
+        // พื้นใต้เท้าตอนนี้ ถ้าอยู่เหนือแท่นคือหลังแท่น ไม่งั้นคือพื้นปกติ
+        const floors = STAGES.map((s) => (overlaps(s, pos.x, pos.z) ? s.topY : GROUND_Y));
+
+        handleJump(floors);
 
         // แรงโน้มถ่วงลดความเร็วลงทุกเฟรม กล่องเลยขึ้นช้าลง แล้วค่อยตกลงมา
         velocityY.current -= GRAVITY * dt;
         pos.y += velocityY.current * dt;
 
         // ตกถึงพื้นแล้วให้หยุด ไม่จมลงไป
-        if (pos.y <= floorY) {
-            pos.y = floorY;
-            velocityY.current = 0;
-        }
+        handleFloorCollision(floors);
 
         // ใช้ทำให้มุมกล้องขยับตาม obj
         const controls = state.controls;

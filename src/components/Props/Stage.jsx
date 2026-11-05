@@ -1,11 +1,17 @@
-import { STAGE } from "./share";
+import { STAGES } from "./share";
 
 function Stage() {
     return (
-        <mesh position={[STAGE.x, STAGE.height / 2, STAGE.z]}>
-            <boxGeometry args={[STAGE.halfX * 2, STAGE.height, STAGE.halfZ * 2]} />
-            <meshStandardMaterial color="pink" />
-        </mesh>
+        <>
+            {STAGES.map((stage) => {
+                return (
+                    <mesh position={[stage.x, stage.height / 2, stage.z]}>
+                        <boxGeometry args={[stage.halfX * 2, stage.height, stage.halfZ * 2]} />
+                        <meshStandardMaterial color={stage.color} />
+                    </mesh>
+                );
+            })}
+        </>
     );
 }
 
